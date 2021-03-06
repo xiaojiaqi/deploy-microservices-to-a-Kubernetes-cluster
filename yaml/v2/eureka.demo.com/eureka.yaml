@@ -1,0 +1,66 @@
+
+apiVersion: apps/v1
+kind: StatefulSet
+metadata:
+  name: eureka-demo-com
+spec:
+  selector:
+    matchLabels:
+      app: eureka.demo.com
+  serviceName: eureka-demo-com-svc
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: eureka.demo.com
+    spec:
+      terminationGracePeriodSeconds: 300
+      containers:
+        - name: eureka-container
+          image: xiaojiaqi/eureka.demo.com:v2
+          imagePullPolicy: IfNotPresent
+          ports:
+            - containerPort: 8761
+              protocol: TCP
+          env:
+            - name: SERVER_PORT #变量的名字
+              value: "8761" #变量的值
+            - name: MY_NODE_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: spec.nodeName
+            - name: MY_POD_NAME
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.name
+            - name: MY_POD_NAMESPACE
+              valueFrom:
+                fieldRef:
+                  fieldPath: metadata.namespace
+            - name: MY_POD_IP
+              valueFrom:
+                fieldRef:
+                  fieldPath: status.podIP
+            - name: MY_IN_SERVICE_NAME
+              value: eureka-demo-com-svc
+            - name: EUREKA_APPLICATION_NAME
+              value: eureka-demo-com
+            - name: EUREKA_REPLICAS
+              value: "3"
+            - name: JAVA_OPTIONS
+              value: "-Xms512m -Xmx512m "
+              
+          resources: #资源管理 
+            requests: #容器运行时，最低资源需求，也就是说最少需要多少资源容器才能正常运行   
+              cpu: 0.5 #CPU资源（核数），两种方式，浮点数或者是整数+m，0.1=100m，最少值为0.001核（1m） 
+              memory: "512Mi" #内存使用量   
+            limits: #资源限制   
+              cpu: 0.8   
+              memory: "800Mi"
+
+          livenessProbe: #pod内容器健康检查的设置
+            httpGet: #通过httpget检查健康，返回200-399之间，则认为容器正常
+              path: / #URI地址
+              port: 8761
+              #host: 127.0.0.1 #主机地址
+              scheme: HTTP

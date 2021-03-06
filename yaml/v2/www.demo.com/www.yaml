@@ -1,0 +1,36 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: www.demo.com-deployment
+spec:
+  selector:
+    matchLabels:
+      app: www.demo.com
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: www.demo.com
+    spec:
+      containers:
+      - name: www-demo-com
+        image: xiaojiaqi/www.demo.com:v2
+        ports:
+        - containerPort: 80
+
+        resources: #资源管理
+          requests: #容器运行时，最低资源需求，也就是说最少需要多少资源容器才能正常运行
+            cpu: 0.1 #CPU资源（核数），两种方式，浮点数或者是整数+m，0.1=100m，最少值为0.001核（1m）
+            memory: 128Mi #内存使用量
+          limits: #资源限制
+            cpu: 0.2
+            memory: 128Mi
+        livenessProbe: #pod内容器健康检查的设置
+          httpGet: #通过httpget检查健康，返回200-399之间，则认为容器正常
+            path: /hs #URI地址
+            port: 80
+            #host: 127.0.0.1 #主机地址
+            scheme: HTTP
+          initialDelaySeconds: 180 #表明第一次检测在容器启动后多长时间后开始
+          timeoutSeconds: 5 #检测的超时时间
+          periodSeconds: 15  #检查间隔时间

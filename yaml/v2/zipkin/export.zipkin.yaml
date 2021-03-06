@@ -1,0 +1,14 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: zipkin-demo-com-ingress
+spec:
+  rules:
+  - host: zipkin.demo.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: zipkin-demo-com-svc
+          servicePort: 9411

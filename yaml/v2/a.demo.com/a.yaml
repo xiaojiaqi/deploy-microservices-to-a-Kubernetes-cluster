@@ -1,0 +1,58 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: a.demo.com-deployment
+
+spec:
+  selector:
+    matchLabels:
+      app: a.demo.com
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: a.demo.com
+      annotations:
+        prometheus.io/scrape: "true"
+        prometheus.io/scheme: "http"
+        prometheus.io/path: "/actuator/prometheus"
+        prometheus.io/port: "80"
+    spec:
+      containers:
+      - name: a-demo-com
+        image: xiaojiaqi/a.demo.com:v2
+        ports:
+        - containerPort: 80
+        env:
+        - name: SERVER_PORT #变量的名字
+          value: "80" #变量的值
+        - name: eureka_client_service-url_defaultZone #变量的名字
+          value: "http://eureka-demo-com-0.eureka-demo-com-svc.default.svc.cluster.local:8761/eureka/,http://eureka-demo-com-1.eureka-demo-com-svc.default.svc.cluster.local:8761/eureka/,http://eureka-demo-com-2.eureka-demo-com-svc.default.svc.cluster.local:8761/eureka/" 
+        - name: spring_cloud_sentinel_transport_port
+          value: "8719"
+        - name: spring_cloud_sentinel_transport_dashboard
+          value: "sentinel-demo-com-svc.default.svc.cluster.local:8080"
+        - name: JAVA_OPTIONS
+          value: "-Xms128m -Xmx128m "
+        - name:  spring_zipkin_base-url
+          value: "http://zipkin-demo-com-svc.default.svc.cluster.local.:9411" 
+          
+          
+ 
+
+        resources: #资源管理
+          requests: #容器运行时，最低资源需求，也就是说最少需要多少资源容器才能正常运行
+            cpu: 0.1 #CPU资源（核数），两种方式，浮点数或者是整数+m，0.1=100m，最少值为0.001核（1m）
+            memory: "128Mi" #内存使用量
+          limits: #资源限制
+            cpu: 0.5
+            memory: "256Mi"
+        livenessProbe: #pod内容器健康检查的设置
+          httpGet: #通过httpget检查健康，返回200-399之间，则认为容器正常
+            path: /hs #URI地址
+            port: 80
+            #host: 127.0.0.1 #主机地址
+            scheme: HTTP
+          initialDelaySeconds: 180 #表明第一次检测在容器启动后多长时间后开始
+          timeoutSeconds: 5 #检测的超时时间
+          periodSeconds: 15  #检查间隔时间

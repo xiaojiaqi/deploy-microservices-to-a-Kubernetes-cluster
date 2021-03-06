@@ -1,0 +1,15 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: eureka-demo-com-svc
+  labels:
+    app: eureka.demo.com
+spec:
+  clusterIP: None
+  selector:
+    app: eureka.demo.com
+  ports:
+    - port: 8761
+      protocol: TCP
+      targetPort: 8761
+  type: ClusterIP

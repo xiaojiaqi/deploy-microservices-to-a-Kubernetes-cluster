@@ -1,0 +1,14 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: eureka-demo-com-ingress
+spec:
+  rules:
+  - host: eureka.demo.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: eureka-demo-com-svc
+          servicePort: 8761
