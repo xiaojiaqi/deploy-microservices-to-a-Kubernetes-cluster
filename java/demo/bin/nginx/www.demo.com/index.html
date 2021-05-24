@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Demo</title>
+    <script src="./lib/vue.js"></script>
+    <script src="./lib/vue-resource.js"></script>
+    <link rel="shortcut icon" href="/favicon.ico"/>
+    <link rel="bookmark" href="/favicon.ico" type="image/x-icon" 　/>
+</head>
+
+<body>
+
+<div id="box">
+
+
+    <div v-html="msg">{{ msg }}</div>
+
+
+    <input type="button" value="get请求" @click="getClick">
+
+</div>
+<script>
+    var vm = new Vue({
+        el: "#box",
+        data: {
+            msg: ""
+
+        },
+        methods: {
+            getClick() {
+
+                this.$http.get("http://www.demo.com/api/helloa").then(result = > {
+                    console.log(result.bodyText);
+                let aaa = result.bodyText;
+                console.log(aaa);
+                console.log(typeof aaa);
+                aaa = aaa.split('\n').join('<br/>');
+                aaa = aaa.replaceAll(' ', '&nbsp;');
+                console.log(aaa);
+                this.msg = aaa;
+
+
+            })
+                ;
+            }
+        }
+    });
+</script>
+
+</body>
+
+</html>

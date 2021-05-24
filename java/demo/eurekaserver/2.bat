@@ -1,0 +1,1 @@
+java -jar -Xms128m -Xmx128m -Dserver.port=1235 -Deureka.client.register-with-eureka=true -Deureka.instance.hostname=bbb -Deureka.client.service-url.defaultZone=http://127.0.0.1:1234/eureka/,http://127.0.0.1:1236/eureka/   ./eurekaserver-1.0.0.jar

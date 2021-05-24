@@ -1,0 +1,14 @@
+---
+apiVersion: networking.k8s.io/v1beta1
+kind: Ingress
+metadata:
+  name: a-demo-com-ingress
+spec:
+  rules:
+  - host: a.demo.com
+    http:
+      paths:
+      - path: /
+        backend:
+          serviceName: a-demo-com-svc
+          servicePort: 80

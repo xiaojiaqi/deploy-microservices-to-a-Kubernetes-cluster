@@ -1,0 +1,20 @@
+server:
+  port: 8761
+
+
+eureka:
+  instance:
+    hostname: eureka.demo.com #eureka服务端的实例名称
+  client:
+    register-with-eureka: true     #false表示不向注册中心注册自己。
+    fetch-registry: false     #false表示自己端就是注册中心，我的职责就是维护服务实例，并不需要去检索服务
+    service-url:
+    #单机就是7001自己
+      defaultZone: http://127.0.0.1:8761/eureka/
+
+  server:
+    enable-self-preservation: false
+
+
+
+

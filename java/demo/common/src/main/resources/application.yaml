@@ -1,0 +1,13 @@
+
+
+
+logging:
+  config: classpath:logback.xml
+
+
+spring:
+  cloud:
+    sentinel:
+      transport:
+        port: 8719
+        dashboard: 127.0.0.1:4567

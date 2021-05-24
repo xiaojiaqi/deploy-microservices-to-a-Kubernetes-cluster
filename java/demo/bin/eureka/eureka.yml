@@ -1,0 +1,64 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: eureka-demo-com
+  labels:
+    app: eureka-demo-com
+  namespace: default    
+spec:
+  clusterIP: None
+  ports:
+  - port: 8761
+    protocol: TCP
+    targetPort: 8761
+  selector:
+    app: eureka
+  type: ClusterIP
+
+---
+apiVersion: apps/v1beta1
+kind: StatefulSet
+metadata:
+  name: eureka
+spec:
+  selector:
+    matchLabels:
+      app: eureka
+  serviceName: "eureka-demo-com"
+  replicas: 3
+  template:
+    metadata:
+      labels:
+        app: eureka
+    spec:
+      terminationGracePeriodSeconds: 10
+      containers:
+      - env:
+        - name: MY_NODE_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: spec.nodeName
+        - name: MY_POD_NAME
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.name
+        - name: MY_POD_NAMESPACE # 传入当前命名空间
+          valueFrom:
+            fieldRef:
+              fieldPath: metadata.namespace
+        - name: MY_POD_IP
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        - name: MY_IN_SERVICE_NAME # 因为pod 通过域名互相访问，需要使用headless 服务名称
+          value: eureka-demo-com
+        - name: EUREKA_APPLICATION_NAME
+          value: "eureka"
+        - name: EUREKA_REPLICAS
+          value: "3"
+        image:  helloHuawei/eureka:v2 # 这个镜像是修改后的。如何打包这个镜像，在后面会介绍
+        imagePullPolicy: IfNotPresent
+        name: eureka-container
+        ports:
+        - containerPort: 8761
+          protocol: TCP

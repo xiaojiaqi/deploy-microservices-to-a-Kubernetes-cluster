@@ -1,0 +1,1 @@
+java -jar -Xms256m -Xmx256m zipkin-server-2.21.6-exec.jar

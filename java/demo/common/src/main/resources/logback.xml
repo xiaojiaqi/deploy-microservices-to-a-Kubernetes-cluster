@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="utf-8"?>
+<configuration debug="false">
+    <appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.out</target>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+    <appender name="STDERR" class="ch.qos.logback.core.ConsoleAppender">
+        <target>System.err</target>
+        <encoder>
+            <pattern>%d{HH:mm:ss.SSS} [%thread] %-5level %logger{36} - %msg%n</pattern>
+        </encoder>
+    </appender>
+
+    <!--
+    <appender name="KAFKA" class="com.demo.springcloud.log.KafkaAppender">
+        <topic>${log_topic}</topic>
+
+        <brokerList>${log_kafka}</brokerList>
+        <formatter class="com.demo.springcloud.log.formatter.JsonFormatter">
+            <expectJson>false</expectJson>
+        </formatter>
+    </appender>
+    -->
+    <root level="info">
+        <!--
+         <appender-ref ref="KAFKA"/>
+        -->
+        <appender-ref ref="STDOUT"/>
+
+        <appender-ref ref="STDERR"/>
+    </root>
+
+
+</configuration>

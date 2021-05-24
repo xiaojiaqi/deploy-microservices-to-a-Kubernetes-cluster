@@ -1,0 +1,18 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: a-demo-com-svc
+  annotations:
+    prometheus.io/scrape: "true"
+    prometheus.io/scheme: "http"
+    prometheus.io/path: "/actuator/prometheus"
+    prometheus.io/port: "80"
+  labels:
+    app: a.demo.com
+spec:
+  type: ClusterIP
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: a.demo.com
