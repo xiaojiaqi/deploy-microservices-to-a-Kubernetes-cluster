@@ -47,7 +47,7 @@
 
 <img src="https://raw.githubusercontent.com/xiaojiaqi/deploy-microservices-to-a-Kubernetes-cluster/main/img/image003.png" width="758" height="444">
 
-   再借一张，这样数据库也被彻底拆分开了。一个巨大复制的单体数据库也按照功能拆成了小的独立数据库。
+   再借一张，这样数据库也被彻底拆分开了。一个巨大复杂的单体数据库也按照功能拆成了小的独立数据库。
 
 微服务就是这么简单吗？ 当然不是，里面有很多细节需要考虑，纸上得来终觉浅,绝知此事要躬行。 这次让我们开始从0开始真正的设计整套系统。
 
